@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>getposition</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+
+    <style>
+* {-webkit-backface-visibility: hidden;margin:0;padding:0; }
+*{-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}
+ul li{list-style: none;}
+html,body,menu,ul,ol,li,p,div,form,h1,h2,h3,h4,h5,h6,img,a img,input,textarea,fieldset{padding:0;margin:0;border:0;}
+h1,h2,h3,h4,h5{font-weight:normal;}
+a{color:#333;text-decoration:none;}
+a:hover{text-decoration:none;}
+a,img,i,span,li,div{-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;}
+.bin{background: rgba(243,152,0,.9);color: #fff;width: 60%;position:fixed;left:20%;top:40%;text-align: center;font-size: 14px;line-height: 22px;padding:10px;border-radius: 6px;}
+.hand-box{
+    position: absolute;width: 86%;left: 46%;top: 20%;
+}
+.food-box{
+    position: absolute;width: 23.2%;left: 35%;top: 70%;
+}
+
+#cold{
+    position: absolute;left: 45.8%;width: 21%;height: 1rem;bottom: 10%;
+}
+#freeze{
+    position: absolute;left: 28.6%;width: 14%;height: 1rem;bottom: 10%;
+}
+#wet{
+    position: absolute;left: 45.8%;width: 21%;height: 1rem;bottom: 10%;
+}
+#dry{
+    position: absolute;left: 45.8%;width: 21.8%;height: 1rem;bottom: 10%;
+}
+.g-box{
+   padding-bottom:1rem; 
+}
+.picb{
+    display: block;width: 100%;
+   
+}
+ </style>
+</head>
+<body>
+
+    <div class='mfour' id='pgame'>
+        <div class='g-box'>
+            <img src="static/g_box.jpg" class="picb">
+            <div class='food-box' id='food'>
+                <img src="static/game_city10_food.png" class="picb food-pic" >
+                <img src="static/shou.png" class="hand-box saked">
+            </div>
+            <div id='cold' class='mini-box'></div>
+            <div id='freeze' class='mini-box'></div>
+            <div id='wet' class='mini-box'></div>
+            <div id='dry' class='mini-box'></div>
+        </div>
+    </div>
+<script src="../js/jquery-2.1.4.min.js"></script>    
+<script type="text/javascript">
+$.usertips = function(options) {
+        var dft = {
+            class:"bin",
+            text:"",
+            time:1500
+        };
+        var ops = $.extend(dft,options);
+        var style = ops.class;
+        var cpTxt = '<div' + ' style="z-index:999" ' + 'class=' +  style +'>'+ ops.text + '</div>';
+        $('body').append(cpTxt);
+        $('.bin').fadeOut(ops.time,function(){
+            $(this).remove();
+        });
+    };
+    var $dataCity = 'city10';
+ window.onload = function () {
+
+    var basicX,basicY,startX, startY, moveX,moveY,X, Y,desX,desY;
+    var dfood = document.getElementById('food');
+
+    dfood.addEventListener("touchstart", function(event) {
+        event.preventDefault();
+
+        basicX= dfood.getBoundingClientRect().left+document.documentElement.scrollLeft;
+        basicY =dfood.getBoundingClientRect().top+document.documentElement.scrollTop;
+       
+        if (event.targetTouches.length == 1) {
+            startX = event.targetTouches[0].pageX; 
+            startY = event.targetTouches[0].pageY; 
+            desX = startX - basicX;
+            desY = startY - basicY;            
+            $('.hand-box').removeClass('saked');            
+        }
+    },false);
+    dfood.addEventListener("touchmove", function(event) {   
+        event.preventDefault();   
+        $('.food-box').css({width:'14%'});
+         if (event.targetTouches.length == 1) {    
+            dfood.style.left = event.targetTouches[0].pageX - desX  + 'px'; 
+            dfood.style.top = event.targetTouches[0].pageY - desY  + 'px'; 
+            var computedStyle = window.getComputedStyle(dfood, "");            
+            moveX = event.targetTouches[0].pageX; 
+            moveY = event.targetTouches[0].pageY;  
+        }
+    },false);
+
+    dfood.addEventListener("touchend", function(event) {
+        event.preventDefault();
+        $('#pgame').css({height:'auto'});
+        $('.hand-box').addClass('hide');
+        
+        var typecheck;
+        if ($dataCity == 'city2' || $dataCity == 'city3' ) {
+            typecheck = 'cold';
+        }else if($dataCity == 'city1' || $dataCity == 'city6'  ) {
+            typecheck = 'freeze';
+        }else if($dataCity == 'city7' || $dataCity == 'city8' ) {
+            typecheck = 'wet';
+        }else{
+            typecheck = 'dry';
+        }      
+        setTimeout(function(){
+            checkRect(typecheck,'food');   
+        },200)
+    },false);
+
+}
+
+var $ganhuo = '9,7,4';
+var $rouhuo = '2,3,6,8';
+var $junhuo = '1,5,10';
+function checkRect(box,check){
+    var $box = '#' + box;
+    console.log(box,check)
+    var  box= document.getElementById(box).getBoundingClientRect();
+    var  check= document.getElementById(check).getBoundingClientRect();
+    var corect,$text;
+    if (((box.left < check.right ) && (check.right < box.right)) && ((box.top < check.bottom ) && (check.bottom < box.bottom)) ) {
+        corect = true;
+    }else if (((box.left < check.left ) && (check.left < box.right)) && ((box.top < check.bottom ) && (check.bottom < box.bottom)) ) {
+        corect = true;      
+    }else if (((box.left < check.right ) && (check.right < box.right)) && ((box.top < check.top ) && (check.top < box.bottom)) ) {
+        corect = true;
+    }else if (((box.left < check.left ) && (check.left < box.right)) && ((box.top < check.bottom ) && (check.bottom < box.bottom)) ) {
+        corect = true;
+    }else{
+        corect = false;
+    }
+    var incheck = $dataCity.substring(4);
+    if (corect) {
+        if ($ganhuo.indexOf(incheck) != -1 ) {
+            $text = '谁还不是小仙女呢!'
+        }else if($rouhuo.indexOf(incheck) != -1 ) {
+            $text = '在这里我永远是小鲜肉!'
+        }else if($junhuo.indexOf(incheck) != -1 ) {
+            $text = '爱这一味，永不变味~'
+        }
+        var inneSrc = "<img src='static/" +$dataCity+"_mini.png' class='picb'>"
+        $($box).html(inneSrc);
+        $('.food-box').addClass('hide');
+        $.usertips({text:$text,time:3000});
+    }else{
+        $.usertips({text:'放错了，再试试！',time:3000});
+        $('.food-box').css({left:'35%',top:'70%',width:'23.2%'})
+        $('.hand-box').addClass('saked');
+        $('.hand-box').removeClass('hide');
+    }
+}
+
+</script>
+</body>
+</html>
