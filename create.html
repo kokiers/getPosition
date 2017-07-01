@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+<script type="text/javascript">
+	$.usertips = function(options) {
+        var dft = {
+            class:"bin",
+            text:"",
+            time:1500
+        };
+        var ops = $.extend(dft,options);
+        var style = ops.class;
+        var cpTxt = '<div' + ' style="z-index:999" ' + 'class=' +  style +'>'+ ops.text + '</div>';
+        $('body').append(cpTxt);
+        $('.bin').fadeOut(ops.time,function(){
+            $(this).remove();
+        });
+    };
+</script>
+</body>
+</html>

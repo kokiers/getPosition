@@ -24,24 +24,24 @@ a,img,i,span,li,div{-webkit-touch-callout:none;-webkit-tap-highlight-color:trans
 }
 
 #cold{
-    position: absolute;left: 45.8%;width: 21%;height: 1rem;bottom: 10%;
+    position: absolute;left: 45.8%;width: 21%;height:1rem;top:32%;
 }
 #freeze{
-    position: absolute;left: 28.6%;width: 14%;height: 1rem;bottom: 10%;
+    position: absolute;left: 28.6%;width: 14%;height:1rem;top: 41%;
 }
 #wet{
-    position: absolute;left: 45.8%;width: 21%;height: 1rem;bottom: 10%;
+    position: absolute;left: 45.8%;width: 21%;height:1rem;top: 41%;
 }
 #dry{
-    position: absolute;left: 45.8%;width: 21.8%;height: 1rem;bottom: 10%;
+    position: absolute;left: 45.8%;width: 21.8%;height:1rem;bottom: 32%;
 }
 .g-box{
-   padding-bottom:1rem; 
+   padding-bottom:1rem;position: relative 
 }
 .picb{
     display: block;width: 100%;
-   
 }
+.hide{display: none !important}
  </style>
 </head>
 <body>
@@ -59,79 +59,64 @@ a,img,i,span,li,div{-webkit-touch-callout:none;-webkit-tap-highlight-color:trans
             <div id='dry' class='mini-box'></div>
         </div>
     </div>
-<script src="../js/jquery-2.1.4.min.js"></script>    
+<script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
 <script type="text/javascript">
-$.usertips = function(options) {
-        var dft = {
-            class:"bin",
-            text:"",
-            time:1500
-        };
-        var ops = $.extend(dft,options);
-        var style = ops.class;
-        var cpTxt = '<div' + ' style="z-index:999" ' + 'class=' +  style +'>'+ ops.text + '</div>';
-        $('body').append(cpTxt);
-        $('.bin').fadeOut(ops.time,function(){
-            $(this).remove();
-        });
-    };
-    var $dataCity = 'city10';
- window.onload = function () {
 
-    var basicX,basicY,startX, startY, moveX,moveY,X, Y,desX,desY;
-    var dfood = document.getElementById('food');
+    var $dataCity = 'city' + Math.round(Math.random()*10);
 
-    dfood.addEventListener("touchstart", function(event) {
-        event.preventDefault();
+     window.onload = function () {
 
-        basicX= dfood.getBoundingClientRect().left+document.documentElement.scrollLeft;
-        basicY =dfood.getBoundingClientRect().top+document.documentElement.scrollTop;
-       
-        if (event.targetTouches.length == 1) {
-            startX = event.targetTouches[0].pageX; 
-            startY = event.targetTouches[0].pageY; 
-            desX = startX - basicX;
-            desY = startY - basicY;            
-            $('.hand-box').removeClass('saked');            
-        }
-    },false);
-    dfood.addEventListener("touchmove", function(event) {   
-        event.preventDefault();   
-        $('.food-box').css({width:'14%'});
-         if (event.targetTouches.length == 1) {    
-            dfood.style.left = event.targetTouches[0].pageX - desX  + 'px'; 
-            dfood.style.top = event.targetTouches[0].pageY - desY  + 'px'; 
-            var computedStyle = window.getComputedStyle(dfood, "");            
-            moveX = event.targetTouches[0].pageX; 
-            moveY = event.targetTouches[0].pageY;  
-        }
-    },false);
+        document.documentElement.style.fontSize = document.body.clientWidth/10 + 'px';
 
-    dfood.addEventListener("touchend", function(event) {
-        event.preventDefault();
-        $('#pgame').css({height:'auto'});
-        $('.hand-box').addClass('hide');
-        
-        var typecheck;
-        if ($dataCity == 'city2' || $dataCity == 'city3' ) {
-            typecheck = 'cold';
-        }else if($dataCity == 'city1' || $dataCity == 'city6'  ) {
-            typecheck = 'freeze';
-        }else if($dataCity == 'city7' || $dataCity == 'city8' ) {
-            typecheck = 'wet';
-        }else{
-            typecheck = 'dry';
-        }      
-        setTimeout(function(){
-            checkRect(typecheck,'food');   
-        },200)
-    },false);
+        var basicX,basicY,startX, startY, moveX,moveY,X, Y,desX,desY;
+        var dfood = document.getElementById('food');
 
-}
+        dfood.addEventListener("touchstart", function(event) {
+            event.preventDefault();
 
-var $ganhuo = '9,7,4';
-var $rouhuo = '2,3,6,8';
-var $junhuo = '1,5,10';
+            basicX= dfood.getBoundingClientRect().left+document.documentElement.scrollLeft;
+            basicY =dfood.getBoundingClientRect().top+document.documentElement.scrollTop;
+
+            if (event.targetTouches.length == 1) {
+                startX = event.targetTouches[0].pageX;
+                startY = event.targetTouches[0].pageY;
+                desX = startX - basicX;
+                desY = startY - basicY;
+            }
+        },false);
+        dfood.addEventListener("touchmove", function(event) {
+            event.preventDefault();
+            $('.food-box').css({width:'14%'});
+             if (event.targetTouches.length == 1) {
+                dfood.style.left = event.targetTouches[0].pageX - desX  + 'px';
+                dfood.style.top = event.targetTouches[0].pageY - desY  + 'px';
+                var computedStyle = window.getComputedStyle(dfood, "");
+                moveX = event.targetTouches[0].pageX;
+                moveY = event.targetTouches[0].pageY;
+            }
+        },false);
+
+        dfood.addEventListener("touchend", function(event) {
+            event.preventDefault();
+            $('.hand-box').addClass('hide');
+
+            var typecheck;
+            if ($dataCity == 'city2' || $dataCity == 'city3' ) {
+                typecheck = 'cold';
+            }else if($dataCity == 'city1' || $dataCity == 'city6'  ) {
+                typecheck = 'freeze';
+            }else if($dataCity == 'city7' || $dataCity == 'city8' ) {
+                typecheck = 'wet';
+            }else{
+                typecheck = 'dry';
+            }
+            setTimeout(function(){
+                checkRect(typecheck,'food');
+            },200)
+        },false);
+
+    }
+
 function checkRect(box,check){
     var $box = '#' + box;
     console.log(box,check)
@@ -141,7 +126,7 @@ function checkRect(box,check){
     if (((box.left < check.right ) && (check.right < box.right)) && ((box.top < check.bottom ) && (check.bottom < box.bottom)) ) {
         corect = true;
     }else if (((box.left < check.left ) && (check.left < box.right)) && ((box.top < check.bottom ) && (check.bottom < box.bottom)) ) {
-        corect = true;      
+        corect = true;
     }else if (((box.left < check.right ) && (check.right < box.right)) && ((box.top < check.top ) && (check.top < box.bottom)) ) {
         corect = true;
     }else if (((box.left < check.left ) && (check.left < box.right)) && ((box.top < check.bottom ) && (check.bottom < box.bottom)) ) {
@@ -151,21 +136,13 @@ function checkRect(box,check){
     }
     var incheck = $dataCity.substring(4);
     if (corect) {
-        if ($ganhuo.indexOf(incheck) != -1 ) {
-            $text = '谁还不是小仙女呢!'
-        }else if($rouhuo.indexOf(incheck) != -1 ) {
-            $text = '在这里我永远是小鲜肉!'
-        }else if($junhuo.indexOf(incheck) != -1 ) {
-            $text = '爱这一味，永不变味~'
-        }
-        var inneSrc = "<img src='static/" +$dataCity+"_mini.png' class='picb'>"
+        alert('恭喜放对了位置');
+        var inneSrc = "<img src='static/city10_mini.png' class='picb'>"
         $($box).html(inneSrc);
         $('.food-box').addClass('hide');
-        $.usertips({text:$text,time:3000});
     }else{
-        $.usertips({text:'放错了，再试试！',time:3000});
-        $('.food-box').css({left:'35%',top:'70%',width:'23.2%'})
-        $('.hand-box').addClass('saked');
+        alert('放错了，再试试！');
+        $('.food-box').css({left:'35%',top:'70%',width:'23.2%'})        
         $('.hand-box').removeClass('hide');
     }
 }
